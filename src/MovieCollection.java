@@ -38,6 +38,13 @@ public class MovieCollection {
             }
         }
     }
+    public void searchTitles() {
+        System.out.println("Enter a title search term: ");
+        String str = scan.nextLine();
+        while () {
+
+        }
+    }
     public void readData() {
         try {
             File myFile = new File("src//movies_data.csv");
