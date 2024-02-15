@@ -28,9 +28,9 @@ public class MovieCollection {
             menuOption = scan.nextLine();
 
             if (menuOption.equals("t")) {
-
+                searchTitles();
             } else if (menuOption.equals("c")) {
-
+                searchCast();
             } else if (menuOption.equals("q")) {
                 System.out.println("Goodbye!");
             } else {
