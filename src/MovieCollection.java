@@ -42,9 +42,9 @@ public class MovieCollection {
         System.out.println("Enter a title search term: ");
         String str = scan.nextLine();
         ArrayList<Movie> searchList = new ArrayList<Movie>();
-        str = str.substring(0, 1).toUpperCase() + str.substring(1);
+        str = str.toLowerCase();
         for (int i = 0; i < movieList.size(); i++) {
-            if (movieList.get(i).getName().contains(str)) {
+            if (movieList.get(i).getName().toLowerCase().contains(str)) {
                 searchList.add(movieList.get(i));
             }
         }
@@ -55,25 +55,71 @@ public class MovieCollection {
                 System.out.println((i + 1) + ". " + searchList.get(i).getName());
             }
             System.out.println("Which movie would you like to learn more about?\nEnter number: ");
-            int learnNum = scan.nextInt();
-            System.out.println(searchList.get(learnNum).toString());
+            int learnNum = scan.nextInt() - 1;
+            if (learnNum > 0 && learnNum < searchList.size()) {
+                System.out.println(searchList.get(learnNum).toString());
+            }
         }
     }
     public void searchCast() {
-        System.out.println("Enter a title search term: ");
+        System.out.println("Enter a person to search for (first or last name): ");
         String str = scan.nextLine();
+        ArrayList<String> searchList = new ArrayList<String>();
+        str = str.toLowerCase();
+        for (int i = 0; i < movieList.size(); i++) {
+            String castNames = movieList.get(i).getCast();
+            String[] castList = castNames.split("\\|");
+            for (int j = 0; j < castList.length; j++) {
+                if (castList[j].toLowerCase().contains(str) && !searchList.contains(castList[j])) {
+                    searchList.add(castList[j]);
+                }
+            }
+        }
+        if (searchList.size() == 0) {
+            System.out.println("No results match that search!");
+        } else {
+            sortList(searchList);
+            for (int i = 0; i < searchList.size(); i++) {
+                System.out.println((i + 1) + ". " + searchList.get(i));
+            }
+            System.out.println("Which person would you like to see more of?\nEnter number: ");
+            int learnNum = scan.nextInt() - 1;
+            if (learnNum > 0 && learnNum < searchList.size()) {
+                searchAllMoviesOfCast(searchList.get(learnNum));
+            }
+        }
+    }
+    public void searchAllMoviesOfCast(String cast) {
+        String castName = cast.toLowerCase();
         ArrayList<Movie> searchList = new ArrayList<Movie>();
         for (int i = 0; i < movieList.size(); i++) {
-            if (movieList.get(i).getCast().contains(str)) {
+            if (movieList.get(i).getCast().toLowerCase().contains(castName)) {
                 searchList.add(movieList.get(i));
             }
         }
-
+        for (int i = 0; i < searchList.size(); i++) {
+            System.out.println((i + 1) + ". " + searchList.get(i).getName());
+        }
+        System.out.println("Which movie would you like to learn more about?\nEnter number: ");
+        int learnNum = scan.nextInt() - 1;
+        System.out.println(searchList.get(learnNum).toString());
+    }
+    public void sortList(ArrayList<String> list){
+        for (int i = 1; i < list.size(); i++) {
+            String str = list.get(i);
+            int idx = i - 1;
+            while (idx >= 0 && str.compareTo(list.get(idx)) <= 0) {
+                list.set(idx + 1, list.get(idx));
+                idx--;
+            }
+            list.set(idx + 1, str);
+        }
     }
     public void readData() {
         try {
             File myFile = new File("src//movies_data.csv");
             Scanner fileScanner = new Scanner(myFile);
+            fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String data = fileScanner.nextLine();
                 String[] splitData = data.split(",");
@@ -87,9 +133,6 @@ public class MovieCollection {
                 movieList.add(movie);
             }
             sortData();
-            for (int i = 0; i < movieList.size(); i++) {
-                System.out.println((i + 1) + ". " + movieList.get(i).getName());
-            }
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
         }

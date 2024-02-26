@@ -33,6 +33,6 @@ public class Movie {
         return userRating;
     }
     public String toString() {
-        return "\nTitle: " + getName() + "\nRuntime: " + getRunTime() + "\nDirected by: " + getDirector() + "\nCast: " + getCast() + "\nOverview: " + getOverview() + "\nUser rating: " + getUserRating();
+        return "\nTitle: " + getName() + "\nRuntime: " + getRunTime() + " minutes\nDirected by: " + getDirector() + "\nCast: " + getCast() + "\nOverview: " + getOverview() + "\nUser rating: " + getUserRating();
     }
 }
